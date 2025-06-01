@@ -2,8 +2,8 @@
 title: "Rapport de laboratoire 1: méthode de Gram-Schmidt"
 subtitle: "MTH8211"
 author:
-  - name: Votre nom
-    email: votre.adresse@polymtl.ca
+  - name: Esse Dawut
+    email: dawut.esse@polymtl.ca
     affiliation:
       - name: Polytechnique Montréal
 format:
@@ -22,31 +22,45 @@ engine: julia
 #| output: false
 using Pkg
 Pkg.activate("rapport_env")    # activate a virtual environment
+using LinearAlgebra
 ```
 
-# Implémentation de Gram-Schmidt classique
+Implémentation de Gram-Schmidt classique
 
-<!--
-Inclure la méthode vue en classe dans gram-schmidt.jl et l'afficher ici.
--->
+{{< include gram-schmidt.jl language="julia" >}}
 
+```{julia}
+include("gram-schmidt.jl")
 # Illustration de l'échec en cas de dépendance linéaire
+  # Exemple pour la version classique :
+  U = [
+      [1.0, 0.0, 0.0],
+      [2.0, 0.0, 0.0],   # dépendant de [1.0, 0.0, 0.0]
+      [0.0, 1.0, 0.0]
+  ]
+  V = gramschmidt(U)
+  println(V)  # On s'attend à NaN ou erreur car la version classique divise par zéro.
+```
 
-<!--
-Proposer un exemple qui met l'implémentation classique en défaut.
-Expliquer la cause de l'échec.
--->
+Implémentation de Gram-Schmidt robuste
 
-# Implémentation de Gram-Schmidt plus robuste
+{{< include gram-schmidt-robuste.jl language="julia" >}}
 
-<!--
-Proposer une manière de vérifier que les vecteurs d'entrée sont linéairement dépendants.
-Votre proposition n'a pas besoin d'être parfaite, mais vous devez discuter ses avantages et inconvénients.
-Implémenter cette méthode dans un fichier gram-schmidt-robuste.jl.
--->
 
-# Démonstration de la nouvelle implémentation
 
-<!--
-Inclure ici votre test.jl et l'exécuter.
--->
+Avantages
+
+Détection claire de la dépendance : on interrompt l’algorithme dès que le résidu ∥w∥ devient ≤ tol, ce qui évite de produire des NaN ou des valeurs aberrantes.
+
+Robustesse numérique : en vérifiant avant la normalisation qu’un vecteur n’est pas « presque nul », on évite la division par un nombre très petit et on réduit les erreurs d’arrondi.
+
+
+Inconvénients
+
+Choix de la tolérance : fixer un seuil fixe  peut conduire à mal classer un vecteur très petit (mais indépendant) comme dépendant si on le choisit trop grand, ou à rater une dépendance si on le prend trop petit.
+
+Arrêt brutal : le « return nothing » stoppe entièrement l’algorithme à la première dépendance détectée, empêchant de construire une base partielle des vecteurs indépendants restants.
+
+Tests
+
+{{< include test.jl language="julia" >}}
