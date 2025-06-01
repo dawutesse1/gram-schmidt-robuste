@@ -1,9 +1,6 @@
 using LinearAlgebra
 
 function gramschmidt_robuste(us::Vector{Vector{Float64}}; tol::Float64 = 1e-10)
-    # us : vecteur de vecteurs d’entrée (Vector{Vector{Float64}})
-    # tol : tolérance pour considérer qu’un résidu est numériquement nul
-
     n = length(us)
     # On prépare un tableau pour stocker les vecteurs orthonormaux
     vs = Vector{Vector{Float64}}(undef, n)
@@ -14,7 +11,7 @@ function gramschmidt_robuste(us::Vector{Vector{Float64}}; tol::Float64 = 1e-10)
 
         # 2) Modified Gram–Schmidt : on projette le résidu v sur chacun des vs[j]
         for j in 1:i-1
-            # Utiliser dot(v, vs[j]) pour projeter le **résidu courant**, pas la version classique dot(us[i], vs[j])
+            # Utiliser dot(v, vs[j]) pour projeter le résidu courant
             coeff = dot(v, vs[j]) / dot(vs[j], vs[j])
             v .-= coeff .* vs[j]   # soustraction élément‐par‐élément, in‐place
         end

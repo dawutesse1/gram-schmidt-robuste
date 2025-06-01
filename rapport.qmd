@@ -23,12 +23,13 @@ engine: julia
 using Pkg
 Pkg.activate("rapport_env")    # activate a virtual environment
 using LinearAlgebra
+using Test
 ```
 
 Implémentation de Gram-Schmidt classique
-
+```{julia}
 {{< include gram-schmidt.jl language="julia" >}}
-
+```
 ```{julia}
 include("gram-schmidt.jl")
 # Illustration de l'échec en cas de dépendance linéaire
@@ -43,9 +44,10 @@ include("gram-schmidt.jl")
 ```
 
 Implémentation de Gram-Schmidt robuste
+```{julia}
 
 {{< include gram-schmidt-robuste.jl language="julia" >}}
-
+```
 
 
 Avantages
@@ -62,5 +64,6 @@ Choix de la tolérance : fixer un seuil fixe  peut conduire à mal classer un ve
 Arrêt brutal : le « return nothing » stoppe entièrement l’algorithme à la première dépendance détectée, empêchant de construire une base partielle des vecteurs indépendants restants.
 
 Tests
-
+```{julia}
 {{< include test.jl language="julia" >}}
+```
